@@ -1,0 +1,4 @@
+pip-tools
+pylint
+pytest
+-r requirements.in
