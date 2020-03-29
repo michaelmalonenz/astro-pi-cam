@@ -1,4 +1,2 @@
-from flask import Blueprint
+from .camera import CAMERA_APP
 
-
-CAMERA_APP = Blueprint('camera', __name__, template_folder='templates')
