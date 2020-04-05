@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from importlib import import_module
 import logging
 import os
@@ -21,7 +22,8 @@ def index():
 
 @CAMERA_APP.route('/take_image', methods=['GET'])
 def take_image():
-    pass
+    frame = Camera().get_frame()
+    return (frame, HTTPStatus.OK, {'Content-Type': 'image/jpeg'})
 
 
 def gen(camera):
