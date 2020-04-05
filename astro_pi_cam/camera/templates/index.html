@@ -3,6 +3,8 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
+        <h1>Video Streaming Demonstration</h1>
+        <img src="{{ url_for('camera.video_feed') }}">
         <form action="/camera/take_image" method="GET">
             <button class="btn btn-primary" type="submit">Take Picture</button>
         </form>
