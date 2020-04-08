@@ -28,6 +28,20 @@ if 'picamera' in sys.modules:
                     # reset stream for next frame
                     stream.seek(0)
                     stream.truncate()
+
+        def capture_still(self, **options):
+            with picamera.PiCamera() as camera:
+                # let camera warm up
+                time.sleep(2)
+
+                for key, value in options.items():
+                    setattr(camera, key, value)
+
+                stream = io.BytesIO()
+                camera.capture(stream, 'jpeg')
+                stream.seek(0)
+                return stream.read()
+
 else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')
 
@@ -42,3 +56,6 @@ else:
             while True:
                 time.sleep(1)
                 yield Camera.imgs[int(time.time()) % 3]
+
+        def capture_still(self, **options):
+            return Camera.imgs[int(time.time()) % 3]

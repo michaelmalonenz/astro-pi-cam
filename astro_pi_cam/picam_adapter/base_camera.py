@@ -62,13 +62,13 @@ class BaseCamera(object):
         if BaseCamera.thread is None:
             BaseCamera.last_access = time.time()
 
-            # start background frame thread
-            BaseCamera.thread = threading.Thread(target=self._thread)
-            BaseCamera.thread.start()
+            # # start background frame thread
+            # BaseCamera.thread = threading.Thread(target=self._thread)
+            # BaseCamera.thread.start()
 
-            # wait until frames are available
-            while self.get_frame() is None:
-                time.sleep(0)
+            # # wait until frames are available
+            # while self.get_frame() is None:
+            #     time.sleep(0)
 
     def get_frame(self):
         """Return the current camera frame."""
@@ -79,6 +79,9 @@ class BaseCamera(object):
         BaseCamera.event.clear()
 
         return BaseCamera.frame
+
+    def capture_still(self, **options):
+        pass
 
     @staticmethod
     def frames():

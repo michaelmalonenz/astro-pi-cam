@@ -2,7 +2,7 @@ from http import HTTPStatus
 from importlib import import_module
 import logging
 import os
-from flask import render_template, Blueprint, Response
+from flask import render_template, Blueprint, Response, request
 
 # import camera driver
 if os.environ.get('CAMERA'):
@@ -22,7 +22,16 @@ def index():
 
 @CAMERA_APP.route('/take_image', methods=['GET'])
 def take_image():
-    frame = Camera().get_frame()
+    camera = Camera()
+    options = {}
+    for key, value in request.args.items():
+        if key == 'denoise':
+            options['image_denoise'] = value == 'on'
+        elif key in ('shutter_speed', 'iso'):
+            options[key] = int(value)
+        else:
+            options[key] = value
+    frame = camera.capture_still(**options)
     return (frame, HTTPStatus.OK, {'Content-Type': 'image/jpeg'})
 
 
