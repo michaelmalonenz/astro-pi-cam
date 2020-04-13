@@ -62,13 +62,13 @@ class BaseCamera(object):
         if BaseCamera.thread is None:
             BaseCamera.last_access = time.time()
 
-            # # start background frame thread
-            # BaseCamera.thread = threading.Thread(target=self._thread)
-            # BaseCamera.thread.start()
+            # start background frame thread
+            BaseCamera.thread = threading.Thread(target=self._thread)
+            BaseCamera.thread.start()
 
-            # # wait until frames are available
-            # while self.get_frame() is None:
-            #     time.sleep(0)
+            # wait until frames are available
+            while self.get_frame() is None:
+                time.sleep(0)
 
     def get_frame(self):
         """Return the current camera frame."""
@@ -83,16 +83,14 @@ class BaseCamera(object):
     def capture_still(self, **options):
         pass
 
-    @staticmethod
-    def frames():
+    def frames(self):
         """"Generator that returns frames from the camera."""
         raise RuntimeError('Must be implemented by subclasses.')
 
-    @classmethod
-    def _thread(cls):
+    def _thread(self):
         """Camera background thread."""
         print('Starting camera thread.')
-        frames_iterator = cls.frames()
+        frames_iterator = self.frames()
         for frame in frames_iterator:
             BaseCamera.frame = frame
             BaseCamera.event.set()  # send signal to clients

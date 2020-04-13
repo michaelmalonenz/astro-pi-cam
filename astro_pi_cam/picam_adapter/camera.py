@@ -2,6 +2,7 @@ import io
 import time
 from pathlib import Path
 import sys
+import gphoto2 as gp
 from .base_camera import BaseCamera
 
 try:
@@ -9,38 +10,65 @@ try:
 except ImportError:
     pass
 
+try:
+    dslr_camera = gp.Camera()
+    dslr_camera.init()
+except gp.GPhoto2Error as ex:
+    pass
 
-if 'picamera' in sys.modules:
+if dslr_camera is not None:
     class Camera(BaseCamera):
-        @staticmethod
-        def frames():
-            with picamera.PiCamera() as camera:
-                # let camera warm up
-                time.sleep(2)
-
-                stream = io.BytesIO()
-                for _ in camera.capture_continuous(stream, 'jpeg',
-                                                    use_video_port=True):
-                    # return current frame
-                    stream.seek(0)
-                    yield stream.read()
-
-                    # reset stream for next frame
-                    stream.seek(0)
-                    stream.truncate()
+        def frames(self):
+            pass
 
         def capture_still(self, **options):
-            with picamera.PiCamera() as camera:
+            pass
+
+elif 'picamera' in sys.modules:
+    class Camera(BaseCamera):
+
+        def __init__(self):
+            super().__init__()
+            self.camera = picamera.PiCamera()
+
+        def __del__(self):
+            if self.camera:
+                self.camera.close()
+
+        def frames(self):
+            if self.camera is None:
+                self.camera = picamera.PiCamera()
                 # let camera warm up
                 time.sleep(2)
 
-                for key, value in options.items():
-                    setattr(camera, key, value)
-
-                stream = io.BytesIO()
-                camera.capture(stream, 'jpeg')
+            stream = io.BytesIO()
+            for _ in self.camera.capture_continuous(stream, 'jpeg',
+                                                use_video_port=True):
+                # return current frame
                 stream.seek(0)
-                return stream.read()
+                yield stream.read()
+
+                # reset stream for next frame
+                stream.seek(0)
+                stream.truncate()
+
+        def capture_still(self, **options):
+            if self.camera:
+                self.camera.close()
+            self.camera = picamera.PiCamera()
+
+            # let camera warm up
+            time.sleep(2)
+
+            for key, value in options.items():
+                setattr(self.camera, key, value)
+
+            stream = io.BytesIO()
+            self.camera.capture(stream, 'jpeg')
+            self.camera.close()
+            self.camera = None
+            stream.seek(0)
+            return stream.read()
 
 else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')
@@ -51,8 +79,7 @@ else:
         files 1.jpg, 2.jpg and 3.jpg at a rate of one frame per second."""
         imgs = [open(str(Path(IMAGES_DIR, f + '.jpg')), 'rb').read() for f in ['1', '2', '3']]
 
-        @staticmethod
-        def frames():
+        def frames(self):
             while True:
                 time.sleep(1)
                 yield Camera.imgs[int(time.time()) % 3]
