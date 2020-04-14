@@ -1,5 +1,6 @@
 import io
 import time
+import os
 from pathlib import Path
 import sys
 import gphoto2 as gp
@@ -14,7 +15,8 @@ try:
     dslr_camera = gp.Camera()
     dslr_camera.init()
 except gp.GPhoto2Error as ex:
-    pass
+    dslr_camera = None
+
 
 if dslr_camera is not None:
     class Camera(BaseCamera):
@@ -22,7 +24,12 @@ if dslr_camera is not None:
             pass
 
         def capture_still(self, **options):
-            pass
+            config = dslr_camera.get_config()
+            dslr_camera.set_config(config)
+            file_path = dslr_camera.capture(gp.GP_CAPTURE_IMAGE)
+            camera_file = dslr_camera.file_get(
+                file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL)
+            return camera_file.stream.read()
 
 elif 'picamera' in sys.modules:
     class Camera(BaseCamera):
