@@ -27,7 +27,7 @@ def take_image():
     for key, value in request.args.items():
         if key == 'denoise':
             options['image_denoise'] = value == 'on'
-        elif key in ('shutter_speed', 'iso', 'num_shots'):
+        elif key in ('shutter_speed', 'iso', 'num_shots', 'frame_between'):
             if value != '':
                 options[key] = int(value)
         else:

@@ -14,7 +14,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="resolution">Resolution:</label>
-                        <select class="form-control" name="resolution" id="resolution">
+                        <select class="form-control" name="resolution" id="resolution" value="{{resolution}}">
                             <option value="3280x2464">3280x2464 (MAX)</option>
                             <option value="2560x1440">2560x1440 (1440p)</option>
                             <option value="1920x1080">1920x1080 (1080p)</option>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iso">ISO:</label>
-                        <select class="form-control" name="iso" id="iso">
+                        <select class="form-control" name="iso" id="iso" value="{{iso}}">
                             <option value="100">100</option>
                             <option value="200">200</option>
                             <option value="320">320</option>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label for="metering">Metering:</label>
-                        <select class="form-control" name="meter_mode" id="metering">
+                        <select class="form-control" name="meter_mode" id="metering" value="{{meter_mode}}">
                             <option value="average">Average</option>
                             <option value="spot">Spot</option>
                             <option value="backlit">Backlit</option>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exposure-mode">Exposure Mode:</label>
-                        <select class="form-control" name="exposure_mode" id="exposure-mode">
+                        <select class="form-control" name="exposure_mode" value="{{exposure_mode}}" id="exposure-mode">
                             <option value="off">Off</option>
                             <option value="auto">Auto</option>
                             <option value="night">Night</option>
@@ -61,6 +61,8 @@
                             <option value="fireworks">Fireworks</option>
                         </select>
                     </div>
+                </div>
+                <div class="col">
                     <div class="form-group">
                         <label for="shutter-speed">Shutter Speed (µs):</label>
                         <input name="shutter_speed" type="number" class="form-control" id="shutter-speed" value="{{shutter_speed}}">
@@ -73,24 +75,10 @@
                         <label for="num-shots">Number of Frames</label>
                         <input name="num_shots" type="number" class="form-control" id="num-shots" value="{{num_shots}}">
                     </div>
-                </div>
-                <div class="col">
-                    <div class="form-group form-check">
-                        <br>
-                        <br>
-                        <input name="timelapse" type="checkbox" class="form-check-input" id="timelapse">
-                        <label class="form-check-label" for="timelapse">Timelapse</label>
+                    <div class="form-group">
+                        <label for="frame-between">Time between frames (ms):</label>
+                        <input name="frame_between" type="number" class="form-control" id="frame-between">
                     </div>
-                    <fieldset id="timelapse-fields" disabled>
-                        <div class="form-group">
-                            <label for="frame-between">Time between frames (ms):</label>
-                            <input name="frame_between" type="number" class="form-control" id="frame-between">
-                        </div>
-                        <div class="form-group">
-                            <label for="time-total">Timelapse length (s):</label>
-                            <input name="timelapse_length" type="number" class="form-control" id="time-total">
-                        </div>
-                    </fieldset>
                 </div>
             </div>
             <div class="form-row">
