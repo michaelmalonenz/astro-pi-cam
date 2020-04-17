@@ -17,7 +17,7 @@ LOGGER = logging.getLogger(__name__)
 
 @CAMERA_APP.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', num_shots=1, shutter_speed=10000)
 
 
 @CAMERA_APP.route('/take_image', methods=['GET'])
@@ -27,12 +27,13 @@ def take_image():
     for key, value in request.args.items():
         if key == 'denoise':
             options['image_denoise'] = value == 'on'
-        elif key in ('shutter_speed', 'iso'):
-            options[key] = int(value)
+        elif key in ('shutter_speed', 'iso', 'num_shots'):
+            if value != '':
+                options[key] = int(value)
         else:
             options[key] = value
-    frame = camera.capture_still(**options)
-    return (frame, HTTPStatus.OK, {'Content-Type': 'image/jpeg'})
+    camera.capture_still(**options)
+    return render_template('index.html', **options)
 
 
 def gen(camera):

@@ -1,4 +1,5 @@
 import io
+from datetime import datetime
 import time
 import os
 from pathlib import Path
@@ -70,12 +71,16 @@ elif 'picamera' in sys.modules:
             for key, value in options.items():
                 setattr(self.camera, key, value)
 
-            stream = io.BytesIO()
-            self.camera.capture(stream, 'jpeg')
+            directory = Path(datetime.now().isoformat())
+            directory.mkdir(0o775)
+            for i in range(1, options['num_shots'] + 1):
+                stream = io.BytesIO()
+                self.camera.capture(stream, 'jpeg')
+                stream.seek(0)
+                with open(directory / f'{i:04d}.jpeg', 'w') as fd:
+                    fd.write(stream.read())
             self.camera.close()
             self.camera = None
-            stream.seek(0)
-            return stream.read()
 
 else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')
