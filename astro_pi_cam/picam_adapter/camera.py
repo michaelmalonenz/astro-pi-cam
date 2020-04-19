@@ -36,7 +36,6 @@ elif 'picamera' in sys.modules:
     class Camera(BaseCamera):
 
         def __init__(self):
-            self.camera = picamera.PiCamera()
             super().__init__()
 
         def __del__(self):
@@ -44,10 +43,9 @@ elif 'picamera' in sys.modules:
                 self.camera.close()
 
         def frames(self):
-            if self.camera is None:
-                self.camera = picamera.PiCamera()
-                # let camera warm up
-                time.sleep(2)
+            self.camera = picamera.PiCamera()
+            # let camera warm up
+            time.sleep(2)
 
             stream = io.BytesIO()
             for _ in self.camera.capture_continuous(stream, 'jpeg',
@@ -63,28 +61,29 @@ elif 'picamera' in sys.modules:
         def capture_still(self, **options):
             if self.camera:
                 self.camera.close()
-            self.camera = picamera.PiCamera()
+            try:
+                self.camera = picamera.PiCamera()
 
-            # let camera warm up
-            time.sleep(2)
+                # let camera warm up
+                time.sleep(2)
 
-            for key, value in options.items():
-                if key not in ('num_shots', 'frame_between'):
-                    setattr(self.camera, key, value)
+                for key, value in options.items():
+                    if key not in ('num_shots', 'frame_between'):
+                        setattr(self.camera, key, value)
 
-            directory = Path(datetime.now().strftime('%y-%m-%d_%H-%M-%S'))
-            directory.mkdir(0o775)
-            for i in range(1, options['num_shots'] + 1):
-                stream = io.BytesIO()
-                self.camera.capture(stream, 'jpeg')
-                stream.seek(0)
-                with open(directory / f'{i:04d}.jpeg', 'wb') as fd:
-                    fd.write(stream.read())
-                if options['frame_between']:
-                    time.sleep(options['frame_between'])
-            self.camera.close()
-            self.camera = None
-
+                directory = Path(datetime.now().strftime('%y-%m-%d_%H-%M-%S'))
+                directory.mkdir(0o775)
+                for i in range(1, options['num_shots'] + 1):
+                    stream = io.BytesIO()
+                    self.camera.capture(stream, 'jpeg')
+                    stream.seek(0)
+                    with open(directory / f'{i:04d}.jpeg', 'wb') as fd:
+                        fd.write(stream.read())
+                    if options.get('frame_between'):
+                        time.sleep(options['frame_between'])
+            finally:
+                self.camera.close()
+                self.camera = None
 else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')
 

@@ -33,7 +33,12 @@ def take_image():
         else:
             options[key] = value
     camera.capture_still(**options)
-    return render_template('index.html', **options)
+    return render_template('index.html', **request.args)
+
+
+@CAMERA_APP.route('/preview')
+def preview_image():
+    return render_template('preview.html')
 
 
 def gen(camera):

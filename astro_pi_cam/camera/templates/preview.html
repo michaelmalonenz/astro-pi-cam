@@ -1,0 +1,10 @@
+{% extends "_base.html" %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md text-center">
+        <h2>Astro Pi Camera Preview</h2>
+        <img src="{{ url_for('camera.video_feed') }}">
+    </div>
+</div>
+{% endblock %}

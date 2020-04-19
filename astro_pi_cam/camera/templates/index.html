@@ -2,12 +2,6 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-md text-center">
-        <h2>Astro Pi Camera</h2>
-        <img src="{{ url_for('camera.video_feed') }}">
-    </div>
-</div>
-<div class="row">
     <div class="col-md">
         <form action="/camera/take_image" method="GET">
             <div class="form-row">
@@ -77,7 +71,7 @@
                     </div>
                     <div class="form-group">
                         <label for="frame-between">Time between frames (ms):</label>
-                        <input name="frame_between" type="number" class="form-control" id="frame-between">
+                        <input name="frame_between" type="number" class="form-control" id="frame-between" value="{{frame_between}}">
                     </div>
                 </div>
             </div>
