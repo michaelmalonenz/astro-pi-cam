@@ -36,8 +36,8 @@ elif 'picamera' in sys.modules:
     class Camera(BaseCamera):
 
         def __init__(self):
-            super().__init__()
             self.camera = picamera.PiCamera()
+            super().__init__()
 
         def __del__(self):
             if self.camera:
