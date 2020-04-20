@@ -71,7 +71,7 @@ elif 'picamera' in sys.modules:
                     if key not in ('num_shots', 'frame_between'):
                         setattr(self.camera, key, value)
 
-                directory = Path(datetime.now().strftime('%y-%m-%d_%H-%M-%S'))
+                directory = Path(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
                 directory.mkdir(0o775)
                 for i in range(1, options['num_shots'] + 1):
                     stream = io.BytesIO()

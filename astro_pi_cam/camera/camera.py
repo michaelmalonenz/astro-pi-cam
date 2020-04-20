@@ -13,11 +13,16 @@ else:
 
 CAMERA_APP = Blueprint('camera', __name__, template_folder='templates')
 LOGGER = logging.getLogger(__name__)
+DEFAULTS = {
+    'num_shots': 1,
+    'shutter_speed': 100000,
+    'frame_between': 50,
+}
 
 
 @CAMERA_APP.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', num_shots=1, shutter_speed=10000)
+    return render_template('index.html', **DEFAULTS)
 
 
 @CAMERA_APP.route('/take_image', methods=['GET'])

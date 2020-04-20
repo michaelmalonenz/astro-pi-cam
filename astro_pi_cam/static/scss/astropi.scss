@@ -2,3 +2,18 @@ body {
     background-color: #262B2F;
     color: white;
 }
+
+.menu {
+    display: flex;
+    justify-content: center;
+    border: solid 2px #007bff;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 20px;
+
+    .menu-item {
+        background-color: #007bff;
+        padding: 8px 15px;
+        color: white;
+    }
+}
