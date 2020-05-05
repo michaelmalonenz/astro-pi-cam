@@ -8,7 +8,7 @@ app.register_blueprint(CAMERA_APP, url_prefix='/camera')
 
 assets = Environment(app)
 assets.url = app.static_url_path
-scss = Bundle('scss/astropi.scss', filters='pyscss', output='astropi.css')
+scss = Bundle('scss/astropi.scss', filters='libsass', depends='**/*.scss', output='astropi.css')
 assets.register('scss_all', scss)
 
 

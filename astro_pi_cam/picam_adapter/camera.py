@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 import sys
 import gphoto2 as gp
-from .base_camera import BaseCamera
 
 try:
     import picamera
@@ -20,9 +19,7 @@ except gp.GPhoto2Error as ex:
 
 
 if dslr_camera is not None:
-    class Camera(BaseCamera):
-        def frames(self):
-            pass
+    class Camera:
 
         def capture_still(self, **options):
             config = dslr_camera.get_config()
@@ -33,30 +30,14 @@ if dslr_camera is not None:
             return camera_file.stream.read()
 
 elif 'picamera' in sys.modules:
-    class Camera(BaseCamera):
+    class Camera:
 
         def __init__(self):
-            super().__init__()
+            self.camera = None
 
         def __del__(self):
             if self.camera:
                 self.camera.close()
-
-        def frames(self):
-            self.camera = picamera.PiCamera()
-            # let camera warm up
-            time.sleep(2)
-
-            stream = io.BytesIO()
-            for _ in self.camera.capture_continuous(stream, 'jpeg',
-                                                use_video_port=True):
-                # return current frame
-                stream.seek(0)
-                yield stream.read()
-
-                # reset stream for next frame
-                stream.seek(0)
-                stream.truncate()
 
         def capture_still(self, **options):
             if self.camera:
@@ -88,15 +69,10 @@ else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')
 
 
-    class Camera(BaseCamera):
+    class Camera:
         """An emulated camera implementation that streams a repeated sequence of
         files 1.jpg, 2.jpg and 3.jpg at a rate of one frame per second."""
         imgs = [open(str(Path(IMAGES_DIR, f + '.jpg')), 'rb').read() for f in ['1', '2', '3']]
-
-        def frames(self):
-            while True:
-                time.sleep(1)
-                yield Camera.imgs[int(time.time()) % 3]
 
         def capture_still(self, **options):
             return Camera.imgs[int(time.time()) % 3]
