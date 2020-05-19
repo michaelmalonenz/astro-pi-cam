@@ -1,3 +1,4 @@
+import base64
 from http import HTTPStatus
 from importlib import import_module
 import logging
@@ -25,7 +26,7 @@ def index():
     return render_template('index.html', **DEFAULTS)
 
 
-@CAMERA_APP.route('/take_image', methods=['GET'])
+@CAMERA_APP.route('/take_image', methods=['GET', 'POST'])
 def take_image():
     camera = Camera()
     options = {}
@@ -37,7 +38,9 @@ def take_image():
                 options[key] = int(value)
         else:
             options[key] = value
-    camera.capture_still(**options)
+    image = camera.capture_still(**options)
+    if request.method == 'POST':
+        return (base64.b64encode(image), HTTPStatus.CREATED)
     return render_template('index.html', **request.args)
 
 

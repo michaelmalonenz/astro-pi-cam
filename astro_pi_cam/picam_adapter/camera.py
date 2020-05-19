@@ -54,14 +54,17 @@ elif 'picamera' in sys.modules:
 
                 directory = Path(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
                 directory.mkdir(0o775)
+                result = None
                 for i in range(1, options['num_shots'] + 1):
                     stream = io.BytesIO()
                     self.camera.capture(stream, 'jpeg')
                     stream.seek(0)
+                    result = stream.read()
                     with open(directory / f'{i:04d}.jpeg', 'wb') as fd:
-                        fd.write(stream.read())
+                        fd.write(result)
                     if options.get('frame_between'):
                         time.sleep(options['frame_between'])
+                return result
             finally:
                 self.camera.close()
                 self.camera = None
