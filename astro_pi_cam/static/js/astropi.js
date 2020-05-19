@@ -3,7 +3,8 @@ function showPreview () {
   const fieldNames = ['resolution', 'iso', 'meter_mode', 'exposure_mode', 'shutter_speed']
   let queryParams = []
   for (let field of fieldNames) {
-    queryParams.push(field + '=' + $(`input[name=${field}]`).val())
+    const value = $(`select[name="${field}]`).children('option:selected').val()
+    queryParams.push(`${field}=${value}`)
   }
   $.ajax({
     method: 'POST',
