@@ -39,9 +39,7 @@ def take_image():
         else:
             options[key] = value
     image = camera.capture_still(**options)
-    if request.method == 'POST':
-        return (base64.b64encode(image), HTTPStatus.CREATED)
-    return render_template('index.html', **request.args)
+    return (base64.b64encode(image), HTTPStatus.CREATED)
 
 
 @CAMERA_APP.route('/preview')
