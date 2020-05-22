@@ -1,0 +1,116 @@
+{% extends "_base.html" %}
+
+{% macro select_option(name, value, label) -%}
+    <option {% if name == value %} selected {% endif %} value="{{value}}">{{label}}</option>
+{%- endmacro %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form action="/camera/take_image" method="GET">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="resolution">Resolution:</label>
+                        <select class="form-control" name="resolution" id="resolution" >
+                            {{ select_option(resolution, '4056x3040', '4056x3040 (MAX HQ)') }}
+                            {{ select_option(resolution, '3280x2464', '3280x2464 (MAX v2)') }}
+                            {{ select_option(resolution, '2560x1440', '2560x1440 (1440p)') }}
+                            {{ select_option(resolution, '1920x1080', '1920x1080 (1080p)') }}
+                            {{ select_option(resolution, '1280x720', '1280x720 (720p)') }}
+                            {{ select_option(resolution, '1280×960', '1280×960') }}
+                            {{ select_option(resolution, '1024x768', '1024x768') }}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="iso">ISO:</label>
+                        <select class="form-control" name="iso" id="iso" >
+                            {{ select_option(iso, '100', '100') }}
+                            {{ select_option(iso, '200', '200') }}
+                            {{ select_option(iso, '320', '320') }}
+                            {{ select_option(iso, '400', '400') }}
+                            {{ select_option(iso, '500', '500') }}
+                            {{ select_option(iso, '640', '640') }}
+                            {{ select_option(iso, '800', '800') }}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="metering">Metering:</label>
+                        <select class="form-control" name="meter_mode" id="metering">
+                            {{ select_option(meter_mode, 'average', 'Average') }}
+                            {{ select_option(meter_mode, 'spot', 'Spot') }}
+                            {{ select_option(meter_mode, 'backlit', 'Backlit') }}
+                            {{ select_option(meter_mode, 'matrix', 'Matrix') }}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exposure-mode">Exposure Mode:</label>
+                        <select class="form-control" name="exposure_mode" id="exposure-mode">
+                            {{ select_option(exposure_mode, 'off', 'Off') }}
+                            {{ select_option(exposure_mode, 'auto', 'Auto') }}
+                            {{ select_option(exposure_mode, 'night', 'Night') }}
+                            {{ select_option(exposure_mode, 'backlight', 'Backlight') }}
+                            {{ select_option(exposure_mode, 'spotlight', 'Spotlight') }}
+                            {{ select_option(exposure_mode, 'sports', 'Sports') }}
+                            {{ select_option(exposure_mode, 'snow', 'Snow') }}
+                            {{ select_option(exposure_mode, 'beach', 'Beach') }}
+                            {{ select_option(exposure_mode, 'verylong', 'long') }}
+                            {{ select_option(exposure_mode, 'fixedfps', 'fps') }}
+                            {{ select_option(exposure_mode, 'antishake', 'Antishake') }}
+                            {{ select_option(exposure_mode, 'fireworks', 'Fireworks') }}
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="shutter-speed">Shutter Speed (s):</label>
+                        <select class="form-control" name="shutter_speed" id="shutter-speed">
+                            {{ select_option(shutter_speed, '1000', '1/1000') }}
+                            {{ select_option(shutter_speed, '2000', '1⁄500') }}
+                            {{ select_option(shutter_speed, '4000', '1⁄250') }}
+                            {{ select_option(shutter_speed, '8000', '1⁄125') }}
+                            {{ select_option(shutter_speed, '20000', '1⁄50') }}
+                            {{ select_option(shutter_speed, '40000', '1⁄25') }}
+                            {{ select_option(shutter_speed, '66666', '1⁄15') }}
+                            {{ select_option(shutter_speed, '125000', '1⁄8') }}
+                            {{ select_option(shutter_speed, '250000', '1⁄4') }}
+                            {{ select_option(shutter_speed, '500000', '1⁄2') }}
+                            {{ select_option(shutter_speed, '1000000', '1') }}
+                            {{ select_option(shutter_speed, '2000000', '2') }}
+                            {{ select_option(shutter_speed, '5000000', '5') }}
+                            {{ select_option(shutter_speed, '10000000', '10') }}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="num-shots">Number of Frames</label>
+                        <input name="num_shots" type="number" class="form-control" id="num-shots"
+                               value="{{ num_shots }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="frame-between">Time between frames (ms):</label>
+                        <input name="frame_between" type="number" class="form-control" id="frame-between"
+                               value="{{ frame_between }}">
+                    </div>
+                    <div class="form-group form-check">
+                        <input name="denoise" type="checkbox" class="form-check-input" id="denoise"
+                               {% if denoise == 'on' %} checked {% endif %}>
+                        <label class="form-check-label" for="denoise">Denoise</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row justify-content-between">
+                <button class="btn btn-secondary" type="button" onclick="showPreview()">
+                    <i class="fas fa-search"></i> Preview
+                </button>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-camera"></i> Capture Image(s)
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal img-container">
+    <img id="preview">
+</div>
+{% endblock %}

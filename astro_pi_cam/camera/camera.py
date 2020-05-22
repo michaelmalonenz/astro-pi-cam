@@ -15,15 +15,16 @@ else:
 CAMERA_APP = Blueprint('camera', __name__, template_folder='templates')
 LOGGER = logging.getLogger(__name__)
 DEFAULTS = {
-    'num_shots': 1,
-    'shutter_speed': 100000,
-    'frame_between': 50,
+    'num_shots': '1',
+    'shutter_speed': '40000',
+    'frame_between': '50',
+    'exposure_mode': 'auto',
 }
 
 
 @CAMERA_APP.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', **DEFAULTS)
+    return render_template('index.html.jinja', **DEFAULTS)
 
 
 @CAMERA_APP.route('/take_image', methods=['GET', 'POST'])
