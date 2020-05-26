@@ -27,7 +27,7 @@ def index():
     return render_template('index.html.jinja', **DEFAULTS)
 
 
-@CAMERA_APP.route('/take_image', methods=['GET', 'POST'])
+@CAMERA_APP.route('/take_image', methods=['GET'])
 def take_image():
     camera = Camera()
     options = {}
@@ -43,6 +43,11 @@ def take_image():
     return (base64.b64encode(image), HTTPStatus.CREATED)
 
 
-@CAMERA_APP.route('/preview')
-def preview_image():
-    return render_template('preview.html')
+@CAMERA_APP.route('/stream')
+def stream():
+    return render_template('stream.html.jinja')
+
+
+@CAMERA_APP.route('/stream_img')
+def stream_image():
+    pass
