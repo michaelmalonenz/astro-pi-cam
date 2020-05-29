@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve the Astro Pi Cam Webserver
+After=network.target
+
+[Service]
+User=pi
+Group=www-data
+WorkingDirectory=/home/pi/astro_pi_cam/astro_pi_cam
+ExecStart=/home/pi/astro_pi_cam/.venv/bin/uwsgi --ini astropicam.ini
+
+
+[Install]
+WantedBy=multi-user.target
