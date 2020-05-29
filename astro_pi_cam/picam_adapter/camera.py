@@ -66,7 +66,8 @@ elif 'picamera' in sys.modules:
                         time.sleep(options['frame_between'])
                 return result
             finally:
-                self.camera.close()
+                if self.camera:
+                    self.camera.close()
                 self.camera = None
 else:
     IMAGES_DIR = Path(Path(__file__).parent.absolute(), 'test_images')

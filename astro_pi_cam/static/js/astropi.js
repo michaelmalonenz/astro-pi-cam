@@ -1,7 +1,7 @@
 /* global $ */
 function showPreview () {
   const selectFieldNames = ['resolution', 'iso', 'meter_mode', 'exposure_mode', 'shutter_speed']
-  let queryParams = { 'num_shots': '1' }
+  let queryParams = { 'num_shots': '1', 'preview': true }
   for (let field of selectFieldNames) {
     const value = $(`select[name="${field}"]`).children('option:selected').val()
     queryParams[field] = value

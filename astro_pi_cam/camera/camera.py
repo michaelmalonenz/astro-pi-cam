@@ -31,16 +31,22 @@ def index():
 def take_image():
     camera = Camera()
     options = {}
+    preview = False
     for key, value in request.args.items():
         if key == 'denoise':
             options['image_denoise'] = value == 'on'
+        elif key == 'preview':
+            preview = value
         elif key in ('shutter_speed', 'iso', 'num_shots', 'frame_between'):
             if value != '':
                 options[key] = int(value)
         else:
             options[key] = value
     image = camera.capture_still(**options)
-    return (base64.b64encode(image), HTTPStatus.CREATED)
+    if preview:
+        return (base64.b64encode(image), HTTPStatus.CREATED)
+    else:
+        return render_template('index.html.jinja', **request.args)
 
 
 @CAMERA_APP.route('/stream')
