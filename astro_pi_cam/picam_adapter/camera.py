@@ -75,7 +75,10 @@ else:
     class Camera:
         """An emulated camera implementation that streams a repeated sequence of
         files 1.jpg, 2.jpg and 3.jpg at a rate of one frame per second."""
-        imgs = [open(str(Path(IMAGES_DIR, f + '.jpg')), 'rb').read() for f in ['1', '2', '3']]
+        imgs = []
+        for f in ['1', '2', '3', 'large']:
+            with open(str(Path(IMAGES_DIR, f + '.jpg')), 'rb') as fd:
+                imgs.append(fd.read())
 
         def capture_still(self, **options):
-            return Camera.imgs[int(time.time()) % 3]
+            return Camera.imgs[int(time.time()) % 4]
