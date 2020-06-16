@@ -42,6 +42,7 @@ def take_image():
                 options[key] = int(value)
         else:
             options[key] = value
+    options['preview'] = preview
     image = camera.capture_still(**options)
     if preview:
         return (base64.b64encode(image), HTTPStatus.CREATED)

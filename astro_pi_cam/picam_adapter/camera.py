@@ -49,7 +49,7 @@ elif 'picamera' in sys.modules:
                 time.sleep(2)
 
                 for key, value in options.items():
-                    if key not in ('num_shots', 'frame_between'):
+                    if key not in ('num_shots', 'frame_between', 'preview'):
                         setattr(self.camera, key, value)
 
                 directory = Path(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
@@ -60,8 +60,9 @@ elif 'picamera' in sys.modules:
                     self.camera.capture(stream, 'jpeg')
                     stream.seek(0)
                     result = stream.read()
-                    with open(directory / f'{i:04d}.jpeg', 'wb') as fd:
-                        fd.write(result)
+                    if not options['preview']:
+                        with open(directory / f'{i:04d}.jpeg', 'wb') as fd:
+                            fd.write(result)
                     if options.get('frame_between'):
                         time.sleep(options['frame_between'])
                 return result
