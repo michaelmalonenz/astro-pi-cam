@@ -55,6 +55,15 @@ def stream():
     return render_template('stream.html.jinja')
 
 
+def gen(camera):
+    """Video streaming generator function."""
+    for frame in camera.frames():
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
 @CAMERA_APP.route('/stream_img')
 def stream_image():
-    pass
+    return Response(
+        gen(Camera()),
+        mimetype='multipart/x-mixed-replace; boundary=frame')

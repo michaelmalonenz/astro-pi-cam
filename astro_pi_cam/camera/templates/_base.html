@@ -16,6 +16,14 @@
     <div class="text-center">
         <h2>Astro Pi Camera</h2>
     </div>
+    <div class="menu">
+        <div class="menu-item">
+            <a href="{{url_for('camera.take_image')}}">Still Image</a>
+        </div>
+        <div class="menu-item">
+            <a href="{{url_for('camera.stream')}}">Stream</a>
+        </div>
+    </div>
     {% block body %}{% endblock %}
 </body>
 </html>

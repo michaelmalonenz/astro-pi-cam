@@ -7143,12 +7143,12 @@ body {
 .menu {
   display: flex;
   justify-content: center;
-  border: solid 2px #007bff;
+  border: solid 2px #f5f5f5;
   border-left: none;
   border-right: none;
   margin-bottom: 20px; }
   .menu .menu-item {
-    background-color: #007bff;
+    background-color: #f5f5f5;
     padding: 8px 15px;
     color: white; }
 
