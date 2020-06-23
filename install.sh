@@ -6,6 +6,6 @@ systemctl link "$DIR"/astropicam.service
 systemctl enable astropicam.service
 systemctl start --no-block astropicam.service
 
-ln -s "$DIR"/astropicam_nginx.conf /etc/nginx/sites_enabled/astropicam.conf
+ln -s "$DIR"/astropicam_nginx.conf /etc/nginx/sites-enabled/astropicam.conf
 
 systemctl restart nginx
